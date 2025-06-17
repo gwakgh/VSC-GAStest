@@ -1,42 +1,50 @@
-// AbilitySystemComponent.h
+ï»¿// AbilitySystemComponent.h
 #pragma once
 #include <vector>
+#include <string>
 #include <memory>
 #include "AttributeSet.h"
 #include "GameplayAbility.h"
 #include "GameplayEffect.h"
 
 /*
-*   GASÀÇ UAbilitySystemComponent¿¡ ÇØ´ç
-*   ¸ğµç °ÍÀ» ÃÑ°ıÇÏ´Â ÄÁÆ®·Ñ Å¸¿ö ¿ªÇÒÀ» ÇÏ´Â Å¬·¡½º
-*   Ä³¸¯ÅÍ´Â ÀÌ ÄÄÆ÷³ÍÆ®¸¦ ¼ÒÀ¯ÇÏ¸ç ¾îºô¸®Æ¼ ºÎ¿©, ¹ßµ¿, ÀÌÆåÆ® Àû¿ë µîÀ» ¸ğµÎ ÀÌ Å¬·¡½º¸¦ ÅëÇØ ¼öÇà
+*   GASì˜ UAbilitySystemComponentì— í•´ë‹¹
+*   ëª¨ë“  ê²ƒì„ ì´ê´„í•˜ëŠ” ì»¨íŠ¸ë¡¤ íƒ€ì›Œ ì—­í• ì„ í•˜ëŠ” í´ë˜ìŠ¤
+*   ìºë¦­í„°ëŠ” ì´ ì»´í¬ë„ŒíŠ¸ë¥¼ ì†Œìœ í•˜ë©° ì–´ë¹Œë¦¬í‹° ë¶€ì—¬, ë°œë™, ì´í™íŠ¸ ì ìš© ë“±ì„ ëª¨ë‘ ì´ í´ë˜ìŠ¤ë¥¼ í†µí•´ ìˆ˜í–‰
 */
 
-class Character; // Àü¹æ ¼±¾ğ
+class Character; // ì „ë°© ì„ ì–¸
 
 class AbilitySystemComponent {
 private:
-    AttributeSet BaseAttributes; // ±âº» ¼Ó¼º
+    AttributeSet BaseAttributes; // ê¸°ë³¸ ì†ì„±
     std::vector<std::shared_ptr<GameplayAbility>> GrantedAbilities;
 
 public:
-    Character* Owner; // ÀÌ ÄÄÆ÷³ÍÆ®ÀÇ ¼ÒÀ¯ÀÚ
+    Character* Owner; // ì´ ì»´í¬ë„ŒíŠ¸ì˜ ì†Œìœ ì
 
     Character* GetOwner() const { return Owner; }
 
     AbilitySystemComponent(Character* InOwner) : Owner(InOwner) {}
 
-    // ¾îºô¸®Æ¼¸¦ ºÎ¿©¹ŞÀ½
+    // ì–´ë¹Œë¦¬í‹°ë¥¼ ë¶€ì—¬ë°›ìŒ
     void GrantAbility(std::shared_ptr<GameplayAbility> Ability) {
         GrantedAbilities.push_back(Ability);
     }
 
-    // ¾îºô¸®Æ¼ »ç¿ë ½Ãµµ
-    void TryActivateAbility(const std::string& AbilityName, AbilitySystemComponent* TargetASC);
+    // ì–´ë¹Œë¦¬í‹° ì‚¬ìš© ì‹œë„
+    bool TryActivateAbility(const std::wstring& AbilityName, AbilitySystemComponent* TargetASC, std::wstring& OutMessage);
+    bool TryActivateAbility(std::shared_ptr<GameplayAbility> AbilityToActivate, AbilitySystemComponent* TargetASC, std::wstring& OutMessage);
+    //
 
-    // ÀÚ½Å¿¡°Ô °ÔÀÓÇÃ·¹ÀÌ ÀÌÆåÆ®¸¦ Àû¿ë
+    // ìì‹ ì—ê²Œ ê²Œì„í”Œë ˆì´ ì´í™íŠ¸ë¥¼ ì ìš©
     void ApplyGameplayEffectToSelf(const GameplayEffect& Effect);
 
-    // AttributeSet¿¡ Á÷Á¢ Á¢±ÙÇÏ±â À§ÇÑ Getter
+    // AttributeSetì— ì§ì ‘ ì ‘ê·¼í•˜ê¸° ìœ„í•œ Getter
     AttributeSet* GetAttributes() { return &BaseAttributes; }
+
+    //ë¶€ì—¬ëœ ì–´ë¹Œë¦¬í‹° ëª©ë¡ì„ ì™¸ë¶€ì—ì„œ ì½ì„ ìˆ˜ ìˆëŠ” Getter
+    const std::vector<std::shared_ptr<GameplayAbility>>& GetGrantedAbilities() const {
+        return GrantedAbilities;
+    }
 };

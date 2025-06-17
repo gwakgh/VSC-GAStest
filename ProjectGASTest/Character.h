@@ -1,25 +1,25 @@
-// Character.h
+ï»¿// Character.h
 #pragma once
 #include <string>
 #include <memory>
 #include "AbilitySystemComponent.h"
 
 /*
-*   Unreal EngineÀÇ ACharacter¿¡ ÇØ´ç
-*   Ä³¸¯ÅÍ È¤Àº ¸ó½ºÅÍ µîÀÇ ±âº» Å¬·¡½º, ÀÌ¸§°ú AbilitySystemComponent¸¦ Æ÷ÇÔ
+*   Unreal Engineì˜ ACharacterì— í•´ë‹¹
+*   ìºë¦­í„° í˜¹ì€ ëª¬ìŠ¤í„° ë“±ì˜ ê¸°ë³¸ í´ë˜ìŠ¤, ì´ë¦„ê³¼ AbilitySystemComponentë¥¼ í¬í•¨
 */
 
 class Character {
 protected:
-    std::string Name;
+    std::wstring Name;
     std::unique_ptr<AbilitySystemComponent> ASC;
 
 public:
-    Character(std::string InName);
+    Character(std::wstring InName);
 
     virtual ~Character();
 
     AbilitySystemComponent* GetAbilitySystemComponent() const;
 
-    const std::string& GetName() const;
+    const std::wstring& GetName() const;
 };

@@ -1,43 +1,82 @@
-#pragma once
-#include "Character.h" // ºÎ¸ğ Å¬·¡½º Æ÷ÇÔ
-#include "ItemBase.h" // ¾ÆÀÌÅÛ °ü·Ã Å¬·¡½º Æ÷ÇÔ
+ï»¿#pragma once
+#include "Character.h" // ë¶€ëª¨ í´ë˜ìŠ¤ í¬í•¨
+#include "ItemBase.h" // ì•„ì´í…œ ê´€ë ¨ í´ë˜ìŠ¤ í¬í•¨
+#include "Hit.h" // Hit ëŠ¥ë ¥ ê´€ë ¨ í´ë˜ìŠ¤ í¬í•¨
+
 #include <iostream>
 #include <vector>
+#include <memory>
 
-class Player : public Character { // Character Å¬·¡½º¸¦ publicÀ¸·Î »ó¼Ó
+class Player : public Character { // Character í´ë˜ìŠ¤ë¥¼ publicìœ¼ë¡œ ìƒì†
 private:
     int m_Level;
     int m_Experience;
     std::vector<std::shared_ptr<ItemBase>> m_Inventory;
 
 public:
-    // »ı¼ºÀÚ¿¡¼­ ºÎ¸ğ Å¬·¡½ºÀÇ »ı¼ºÀÚ¸¦ È£Ãâ (¸Å¿ì Áß¿ä)
-    Player(const std::string& InName)
+    // ìƒì„±ìì—ì„œ ë¶€ëª¨ í´ë˜ìŠ¤ì˜ ìƒì„±ìë¥¼ í˜¸ì¶œ (ë§¤ìš° ì¤‘ìš”)
+    Player(const std::wstring& InName)
         : Character(InName), m_Level(1), m_Experience(0) {
-        // ÇÃ·¹ÀÌ¾î »ı¼º ½Ã Æ¯º°ÇÑ ÃÊ±âÈ­°¡ ÇÊ¿äÇÏ¸é ¿©±â¿¡ ÀÛ¼º
+
+        // í”Œë ˆì´ì–´ì˜ ì´ˆê¸° ìŠ¤íƒ¯ ì„¤ì • (í•„ìš” ì‹œ)
+        auto attrs = GetAbilitySystemComponent()->GetAttributes();
+        attrs->Strength = 12.0f;
+        attrs->Intelligence = 8.0f;
+
+        // [ì¶”ê°€] ì„¤ì •ëœ ì´ˆê¸° ìŠ¤íƒ¯ì„ ë°”íƒ•ìœ¼ë¡œ íŒŒìƒ ìŠ¤íƒ¯ì„ ê³„ì‚°
+        attrs->RecalculateDerivedStats();
+        // í˜„ì¬ ì²´ë ¥/ë§ˆë‚˜ë„ ìµœëŒ€ì¹˜ë¡œ ì„¤ì •
+        attrs->Health = attrs->MaxHealth;
+        attrs->Mana = attrs->MaxMana;
+
+        auto hit = std::make_shared<Hit>();
+        this->GetAbilitySystemComponent()->GrantAbility(hit);
+
     }
 
     void ShowStatus() const {
         AttributeSet* attrs = GetAbilitySystemComponent()->GetAttributes();
-        std::cout << "--- " << GetName() << " »óÅÂ ---" << std::endl;
-        std::cout << "  HP: " << attrs->Health << " / " << attrs->MaxHealth << std::endl;
-        std::cout << "  MP: " << attrs->Mana << " / " << attrs->MaxMana << std::endl;
-        std::cout << "--------------------" << std::endl;
+        std::wcout << L"--- " << GetName() << L" ìƒíƒœ ---" << std::endl;
+        std::wcout << L"  HP: " << attrs->Health << L" / " << attrs->MaxHealth << std::endl;
+        std::wcout << L"  MP: " << attrs->Mana << L" / " << attrs->MaxMana << std::endl;
+        std::wcout << L"--------------------" << std::endl;
     }
 
     void AddExperience(int Amount) {
         m_Experience += Amount;
-        // °æÇèÄ¡°¡ Æ¯Á¤ ¼öÄ¡¸¦ ³ÑÀ¸¸é ·¹º§¾÷ÇÏ´Â ·ÎÁ÷ µî
-        std::cout << GetName() << "ÀÌ(°¡) °æÇèÄ¡ " << Amount << "À»(¸¦) È¹µæÇß½À´Ï´Ù." << std::endl;
+        // ê²½í—˜ì¹˜ê°€ íŠ¹ì • ìˆ˜ì¹˜ë¥¼ ë„˜ìœ¼ë©´ ë ˆë²¨ì—…í•˜ëŠ” ë¡œì§ ë“±
+        std::wcout << GetName().c_str() << L"ì´(ê°€) ê²½í—˜ì¹˜ " << Amount << L"ì„(ë¥¼) íšë“í–ˆìŠµë‹ˆë‹¤." << std::endl;
     }
-    
-    void AddItem(std::shared_ptr<ItemBase> NewItem) {
-        // ÀÎº¥Åä¸®¿¡ ¾ÆÀÌÅÛ Ãß°¡ ·ÎÁ÷
 
-        if (NewItem == nullptr) return; // À¯È¿ÇÏÁö ¾ÊÀº ¾ÆÀÌÅÛÀº Ãß°¡ÇÏÁö ¾ÊÀ½
+    void AddItem(std::shared_ptr<ItemBase> NewItem) {
+        // ì¸ë²¤í† ë¦¬ì— ì•„ì´í…œ ì¶”ê°€ ë¡œì§
+
+        if (NewItem == nullptr) return; // ìœ íš¨í•˜ì§€ ì•Šì€ ì•„ì´í…œì€ ì¶”ê°€í•˜ì§€ ì•ŠìŒ
 
         m_Inventory.push_back(NewItem);
-        std::cout << GetName() << "ÀÌ(°¡) " << NewItem->ItemName << "À»(¸¦) È¹µæÇß½À´Ï´Ù." << std::endl;
+        std::wcout << GetName().c_str() << L"ì´(ê°€) " << NewItem->ItemName.c_str() << L"ì„(ë¥¼) íšë“í–ˆìŠµë‹ˆë‹¤." << std::endl;
     }
-    
+    const std::vector<std::shared_ptr<ItemBase>>& GetInventory() const {
+        return m_Inventory;
+    }
+
+    bool UseItem(int inventorySlot, Character& target, std::wstring& OutMessage) {
+        if (inventorySlot < 0 || inventorySlot >= m_Inventory.size()) {
+            OutMessage = L"ì˜ëª»ëœ ì•„ì´í…œ ìŠ¬ë¡¯ì…ë‹ˆë‹¤."; // ì‹¤íŒ¨ ë©”ì‹œì§€ë„ ì„¤ì •
+            return false;
+        }
+
+        auto itemToUse = m_Inventory[inventorySlot];
+        if (itemToUse && itemToUse->UsageAbility) {
+            // [ìˆ˜ì •] OutMessageë¥¼ ê·¸ëŒ€ë¡œ ì „ë‹¬í•˜ì—¬ TryActivateAbilityë¥¼ í˜¸ì¶œí•©ë‹ˆë‹¤.
+            return GetAbilitySystemComponent()->TryActivateAbility(
+                itemToUse->UsageAbility,
+                target.GetAbilitySystemComponent(),
+                OutMessage // ì „ë‹¬ë°›ì€ OutMessageë¥¼ ê·¸ëŒ€ë¡œ ë„˜ê²¨ì¤Œ
+            );
+        }
+
+        OutMessage = L"ì‚¬ìš©í•  ìˆ˜ ì—†ëŠ” ì•„ì´í…œì…ë‹ˆë‹¤."; // ì‹¤íŒ¨ ë©”ì‹œì§€ë„ ì„¤ì •
+        return false;
+    }
 };

@@ -1,12 +1,12 @@
-#pragma once
+ï»¿#pragma once
 #include "GameplayAbility.h"
 
 class MagicClawAbility : public GameplayAbility {
 public:
-    // »ı¼ºÀÚ: ¸ÅÁ÷Å¬·ÎÀÇ °íÀ¯ÇÑ ¼Ó¼ºÀ» ¼³Á¤ÇÕ´Ï´Ù.
+    // ìƒì„±ì: ë§¤ì§í´ë¡œì˜ ê³ ìœ í•œ ì†ì„±ì„ ì„¤ì •í•©ë‹ˆë‹¤.
     MagicClawAbility();
 
-    // ºÎ¸ğÀÇ °¡»ó ÇÔ¼ö¸¦ ÀçÁ¤ÀÇÇÏ¿© ¸ÅÁ÷Å¬·Î¸¸ÀÇ ·ÎÁ÷À» ±¸ÇöÇÕ´Ï´Ù.
-    // override Å°¿öµå´Â ºÎ¸ğÀÇ ÇÔ¼ö¸¦ ÀçÁ¤ÀÇÇÑ´Ù´Â °ÍÀ» ¸í½ÃÇÏ¿© ½Ç¼ö¸¦ ¹æÁöÇÕ´Ï´Ù.
+    // ë¶€ëª¨ì˜ ê°€ìƒ í•¨ìˆ˜ë¥¼ ì¬ì •ì˜í•˜ì—¬ ë§¤ì§í´ë¡œë§Œì˜ ë¡œì§ì„ êµ¬í˜„í•©ë‹ˆë‹¤.
+    // override í‚¤ì›Œë“œëŠ” ë¶€ëª¨ì˜ í•¨ìˆ˜ë¥¼ ì¬ì •ì˜í•œë‹¤ëŠ” ê²ƒì„ ëª…ì‹œí•˜ì—¬ ì‹¤ìˆ˜ë¥¼ ë°©ì§€í•©ë‹ˆë‹¤.
     virtual bool CanActivate(AbilitySystemComponent* SourceASC) override;
 };

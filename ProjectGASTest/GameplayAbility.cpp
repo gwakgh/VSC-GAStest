@@ -1,24 +1,67 @@
-#include "GameplayAbility.h"
+ï»¿#include "GameplayAbility.h"
 
 /*
-*   GASÀÇ UGameplayAbility¿¡ ÇØ´ç
-*   ÇØ´ç ÆÄÀÏÀº ¸í¸ñ»óÀ¸·Î¸¸ Á¸ÀçÇÏ¸ç, ½ÇÁ¦ ±¸ÇöÀº ÀÌ Å¬·¡½º¿¡¼­ ÆÄ»ýµÈ Å¬·¡½º¿¡¼­ ÀÌ·ç¾îÁü
-*   ´Ù¸¸, °øÅë ·ÎÁ÷À» »ý¼ºÇÒ °æ¿ì ÀÌ°÷¿¡ ÀÛ¼ºÇÒ ¼ö ÀÖÀ½ 
-*   - CC±â µîÀ¸·Î ÀÎÇØ ¸ðµç ½ºÅ³ »ç¿ëÀ» Á¦ÇÑÇÏ°í ½ÍÀº °æ¿ì
-*   - ±Û·Î¹ú Äð´Ù¿îÀ¸·Î ½ºÅ³À» °ü¸®ÇÒ °æ¿ì
-*   - µð¹ö±ëÀ» À§ÇØ ¸ðµç ½ºÅ³ÀÌ ½ÇÇàµÉ ¶§ ·Î±×¸¦ ³²±â±â À§ÇÑ °æ¿ì µî
+*   GASì˜ UGameplayAbilityì— í•´ë‹¹
+*   í•´ë‹¹ íŒŒì¼ì€ ëª…ëª©ìƒìœ¼ë¡œë§Œ ì¡´ìž¬í•˜ë©°, ì‹¤ì œ êµ¬í˜„ì€ ì´ í´ëž˜ìŠ¤ì—ì„œ íŒŒìƒëœ í´ëž˜ìŠ¤ì—ì„œ ì´ë£¨ì–´ì§
+*   ë‹¤ë§Œ, ê³µí†µ ë¡œì§ì„ ìƒì„±í•  ê²½ìš° ì´ê³³ì— ìž‘ì„±í•  ìˆ˜ ìžˆìŒ 
+*   - CCê¸° ë“±ìœ¼ë¡œ ì¸í•´ ëª¨ë“  ìŠ¤í‚¬ ì‚¬ìš©ì„ ì œí•œí•˜ê³  ì‹¶ì€ ê²½ìš°
+*   - ê¸€ë¡œë²Œ ì¿¨ë‹¤ìš´ìœ¼ë¡œ ìŠ¤í‚¬ì„ ê´€ë¦¬í•  ê²½ìš°
+*   - ë””ë²„ê¹…ì„ ìœ„í•´ ëª¨ë“  ìŠ¤í‚¬ì´ ì‹¤í–‰ë  ë•Œ ë¡œê·¸ë¥¼ ë‚¨ê¸°ê¸° ìœ„í•œ ê²½ìš° ë“±
 */
-// »ý¼ºÀÚ ±¸Çö
+// ìƒì„±ìž êµ¬í˜„
 GameplayAbility::GameplayAbility() {
-    // Activate ¸â¹ö º¯¼ö¸¦ '¾Æ¹«°Íµµ ÇÏÁö ¾Ê´Â' ±âº» ¶÷´Ù ÇÔ¼ö·Î ÃÊ±âÈ­ÇÕ´Ï´Ù.
-    // ÀÌ·¸°Ô ÇÏ¸é ¾ÈÁ¤¼ºÀÌ ³ô¾ÆÁý´Ï´Ù.
-    Activate = [](AbilitySystemComponent* SourceASC, AbilitySystemComponent* TargetASC) {
-        // ±âº»ÀûÀ¸·Î ¾Æ¹«°Íµµ ÇÏÁö ¾ÊÀ½
-        };
+    // Activate ë©¤ë²„ ë³€ìˆ˜ë¥¼ 'ì•„ë¬´ê²ƒë„ í•˜ì§€ ì•ŠëŠ”' ê¸°ë³¸ ëžŒë‹¤ í•¨ìˆ˜ë¡œ ì´ˆê¸°í™”í•©ë‹ˆë‹¤.
+    // ì´ë ‡ê²Œ í•˜ë©´ ì•ˆì •ì„±ì´ ë†’ì•„ì§‘ë‹ˆë‹¤.
 }
 
-// CanActivate ÇÔ¼öÀÇ ½ÇÁ¦ ±¸Çö
+// CanActivate í•¨ìˆ˜ì˜ ì‹¤ì œ êµ¬í˜„
 bool GameplayAbility::CanActivate(AbilitySystemComponent* SourceASC) {
-    // Áö±ÝÀº ±âº» µ¿ÀÛ¸¸ ÇÏÁö¸¸, ³ªÁß¿¡ °øÅë ·ÎÁ÷À» ¿©±â¿¡ Ãß°¡ÇÒ ¼ö ÀÖÀ½
+    // ì§€ê¸ˆì€ ê¸°ë³¸ ë™ìž‘ë§Œ í•˜ì§€ë§Œ, ë‚˜ì¤‘ì— ê³µí†µ ë¡œì§ì„ ì—¬ê¸°ì— ì¶”ê°€í•  ìˆ˜ ìžˆìŒ
     return true;
 }
+/*
+void as() {
+    // 1. ëª…ì¤‘ë¥  ê³„ì‚°
+    auto sourceAttrs = SourceASC->GetAttributes();
+    auto targetAttrs = TargetASC->GetAttributes();
+    int hitChance = 95 + static_cast<int>(sourceAttrs->Agility - targetAttrs->Agility);
+
+    // 2. ë¹—ë‚˜ê° íŒì •
+    if (ConsoleUtils::GetRandomInt(1, 100) > hitChance) {
+        OutMessage = L"ê³µê²©ì´ ë¹—ë‚˜ê°”ë‹¤!";
+        return;
+    }
+
+    // 3. ë§ˆë‚˜ ì†Œëª¨ (ëª…ì¤‘í–ˆì„ ë•Œë§Œ)
+    GameplayEffect manaEffect;
+    manaEffect.AttributeToModify = "Mana";
+    manaEffect.ModifierValue = -this->ManaCost;
+    SourceASC->ApplyGameplayEffectToSelf(manaEffect);
+
+    // 4. ë°ë¯¸ì§€ ê³„ì‚°
+    float baseDamage = 0.0f;
+    float targetDefense = 0.0f;
+
+    if (this->DamageType == EDamageType::Magical) {
+        baseDamage = sourceAttrs->Intelligence * 1.5f;
+        targetDefense = targetAttrs->MagicResistance;
+    }
+    else {
+        baseDamage = sourceAttrs->Strength * 1.2f;
+        targetDefense = targetAttrs->DefensePower;
+    }
+
+    float damageAfterDefense = max(1.0f, baseDamage - targetDefense);
+
+    // 5. ìµœì¢… ë°ë¯¸ì§€ì— ë‚œìˆ˜ ì ìš©
+    float minDamage = damageAfterDefense * 0.85f;
+    float maxDamage = damageAfterDefense * 1.15f;
+    float finalRandomDamage = ConsoleUtils::GetRandomFloat(minDamage, maxDamage);
+
+    // 6. ìµœì¢… íš¨ê³¼ ì ìš© ë° ê²°ê³¼ ë©”ì‹œì§€ ì„¤ì •
+    GameplayEffect damageEffect;
+    damageEffect.AttributeToModify = "Health";
+    damageEffect.ModifierValue = -finalRandomDamage;
+    TargetASC->ApplyGameplayEffectToSelf(damageEffect);
+}
+*/

@@ -1,16 +1,16 @@
-#pragma once
+ï»¿#pragma once
 #include <string>
 #include <memory>
 
-// Àü¹æ ¼±¾ğ
+// ì „ë°© ì„ ì–¸
 class GameplayAbility;
 
-// ¾ÆÀÌÅÛÀÇ Á¾·ù¸¦ ±¸ºĞÇÏ±â À§ÇÑ ¿­°ÅÇü
+// ì•„ì´í…œì˜ ì¢…ë¥˜ë¥¼ êµ¬ë¶„í•˜ê¸° ìœ„í•œ ì—´ê±°í˜•
 enum class EItemType {
-    Consumable, // ¼Ò¸ğÇ° (Æ÷¼Ç µî)
-    Equipment,  // Àåºñ (°Ë, °©¿Ê µî)
-    Quest,      // Äù½ºÆ® ¾ÆÀÌÅÛ
-    Etc         // ±âÅ¸
+    Consumable, // ì†Œëª¨í’ˆ (í¬ì…˜ ë“±)
+    Equipment,  // ì¥ë¹„ (ê²€, ê°‘ì˜· ë“±)
+    Quest,      // í€˜ìŠ¤íŠ¸ ì•„ì´í…œ
+    Etc         // ê¸°íƒ€
 };
 
 class ItemBase {
@@ -18,16 +18,16 @@ public:
     std::string ItemName;
     std::string Description;
     EItemType Type;
-    int MaxStack; // ÃÖ´ë ¸î °³±îÁö °ãÄ¥ ¼ö ÀÖ´ÂÁö
+    int MaxStack; // ìµœëŒ€ ëª‡ ê°œê¹Œì§€ ê²¹ì¹  ìˆ˜ ìˆëŠ”ì§€
 
-    // ÀÌ ¾ÆÀÌÅÛÀ» »ç¿ëÇßÀ» ¶§ ¹ßµ¿µÉ ¾îºô¸®Æ¼.
-    // ÀÌ Æ÷ÀÎÅÍ°¡ nullptrÀÌ¸é »ç¿ëÇÒ ¼ö ¾ø´Â ¾ÆÀÌÅÛÀÔ´Ï´Ù.
+    // ì´ ì•„ì´í…œì„ ì‚¬ìš©í–ˆì„ ë•Œ ë°œë™ë  ì–´ë¹Œë¦¬í‹°.
+    // ì´ í¬ì¸í„°ê°€ nullptrì´ë©´ ì‚¬ìš©í•  ìˆ˜ ì—†ëŠ” ì•„ì´í…œì…ë‹ˆë‹¤.
     std::shared_ptr<GameplayAbility> UsageAbility;
 
     ItemBase()
         : MaxStack(1), UsageAbility(nullptr) {
     }
 
-    // ±â¹İ Å¬·¡½ºÀÌ¹Ç·Î °¡»ó ¼Ò¸êÀÚ´Â ÇÊ¼öÀÔ´Ï´Ù.
+    // ê¸°ë°˜ í´ë˜ìŠ¤ì´ë¯€ë¡œ ê°€ìƒ ì†Œë©¸ìëŠ” í•„ìˆ˜ì…ë‹ˆë‹¤.
     virtual ~ItemBase() = default;
 };

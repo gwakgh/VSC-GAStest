@@ -1,7 +1,7 @@
-#include "Character.h"
+﻿#include "Character.h"
 #include "AbilitySystemComponent.h"
 
-Character::Character(std::string InName) : Name(InName) {
+Character::Character(std::wstring InName) : Name(InName) {
     ASC = std::make_unique<AbilitySystemComponent>(this);
 }
 
@@ -12,6 +12,6 @@ AbilitySystemComponent* Character::GetAbilitySystemComponent() const {
     return ASC.get();
 }
 
-const std::string& Character::GetName() const {
+const std::wstring& Character::GetName() const {
     return Name;
 }

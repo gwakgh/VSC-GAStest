@@ -1,6 +1,11 @@
 C:\Users\gwakgh\source\repos\ProjectGASTest\ProjectGASTest\AbilitySystemComponent.cpp;C:\Users\gwakgh\source\repos\ProjectGASTest\ProjectGASTest\x64\Debug\AbilitySystemComponent.obj
+C:\Users\gwakgh\source\repos\ProjectGASTest\ProjectGASTest\AttributeSet.cpp;C:\Users\gwakgh\source\repos\ProjectGASTest\ProjectGASTest\x64\Debug\AttributeSet.obj
+C:\Users\gwakgh\source\repos\ProjectGASTest\ProjectGASTest\BattleManager.cpp;C:\Users\gwakgh\source\repos\ProjectGASTest\ProjectGASTest\x64\Debug\BattleManager.obj
 C:\Users\gwakgh\source\repos\ProjectGASTest\ProjectGASTest\Character.cpp;C:\Users\gwakgh\source\repos\ProjectGASTest\ProjectGASTest\x64\Debug\Character.obj
+C:\Users\gwakgh\source\repos\ProjectGASTest\ProjectGASTest\ConsoleUtils.cpp;C:\Users\gwakgh\source\repos\ProjectGASTest\ProjectGASTest\x64\Debug\ConsoleUtils.obj
 C:\Users\gwakgh\source\repos\ProjectGASTest\ProjectGASTest\GameplayAbility.cpp;C:\Users\gwakgh\source\repos\ProjectGASTest\ProjectGASTest\x64\Debug\GameplayAbility.obj
+C:\Users\gwakgh\source\repos\ProjectGASTest\ProjectGASTest\Hit.cpp;C:\Users\gwakgh\source\repos\ProjectGASTest\ProjectGASTest\x64\Debug\Hit.obj
+C:\Users\gwakgh\source\repos\ProjectGASTest\ProjectGASTest\Hit.h;C:\Users\gwakgh\source\repos\ProjectGASTest\ProjectGASTest\x64\Debug\Hit.obj
 C:\Users\gwakgh\source\repos\ProjectGASTest\ProjectGASTest\ItemBase.h;C:\Users\gwakgh\source\repos\ProjectGASTest\ProjectGASTest\x64\Debug\ItemBase.obj
 C:\Users\gwakgh\source\repos\ProjectGASTest\ProjectGASTest\MagicClawAbility.cpp;C:\Users\gwakgh\source\repos\ProjectGASTest\ProjectGASTest\x64\Debug\MagicClawAbility.obj
 C:\Users\gwakgh\source\repos\ProjectGASTest\ProjectGASTest\main.cpp;C:\Users\gwakgh\source\repos\ProjectGASTest\ProjectGASTest\x64\Debug\main.obj

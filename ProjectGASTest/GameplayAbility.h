@@ -1,30 +1,38 @@
-// GameplayAbility.h
+ï»¿// GameplayAbility.h
 #pragma once
 #include <string>
-#include <functional> // std::functionÀ» »ç¿ëÇÏ±â À§ÇØ Ãß°¡
+#include <functional> // std::functionì„ ì‚¬ìš©í•˜ê¸° ìœ„í•´ ì¶”ê°€
 
 /*
-*   GAS ÀÇ UGameplayAbility ¿¡ ÇØ´ç
-*   Ä³¸¯ÅÍ°¡ »ç¿ëÇÒ ¼ö ÀÖ´Â ´É·Â(¾îºô¸®Æ¼)À» Á¤ÀÇÇÏ´Â Å¬·¡½º
-*   È¤Àº ½ºÅ³ÀÌ³ª Çàµ¿¿¡ ´ëÇÑ Á¤ÀÇ¸¦ Æ÷ÇÔ
+*   GAS ì˜ UGameplayAbility ì— í•´ë‹¹
+*   ìºë¦­í„°ê°€ ì‚¬ìš©í•  ìˆ˜ ìˆëŠ” ëŠ¥ë ¥(ì–´ë¹Œë¦¬í‹°)ì„ ì •ì˜í•˜ëŠ” í´ë˜ìŠ¤
+*   í˜¹ì€ ìŠ¤í‚¬ì´ë‚˜ í–‰ë™ì— ëŒ€í•œ ì •ì˜ë¥¼ í¬í•¨
 */
 
-// Àü¹æ ¼±¾ğ
+// ì „ë°© ì„ ì–¸
 class AbilitySystemComponent;
 class GameplayEffect;
 
+enum class EDamageType {
+    Physical, // ë¬¼ë¦¬ í”¼í•´
+    Magical,  // ë§ˆë²• í”¼í•´
+    True      // ê³ ì • í”¼í•´
+};
+
 class GameplayAbility {
 public:
-    std::string AbilityName = "±âº» °ø°İ";
+    std::wstring AbilityName = L"ê¸°ë³¸ ê³µê²©";
     float ManaCost = 0.0f;
     float Cooldown = 0.0f;
 
+	EDamageType DamageType = EDamageType::Physical; // ê¸°ë³¸ í”¼í•´ ìœ í˜•ì€ ë¬¼ë¦¬ í”¼í•´
+
     GameplayAbility();
-    // ÀÌ ¾îºô¸®Æ¼¸¦ »ç¿ëÇÒ ¼ö ÀÖ´ÂÁö È®ÀÎ (¸¶³ª, ÄğÅ¸ÀÓ µî)
+    // ì´ ì–´ë¹Œë¦¬í‹°ë¥¼ ì‚¬ìš©í•  ìˆ˜ ìˆëŠ”ì§€ í™•ì¸ (ë§ˆë‚˜, ì¿¨íƒ€ì„ ë“±)
     virtual bool CanActivate(AbilitySystemComponent* SourceASC);
-    // ¾îºô¸®Æ¼¸¦ ½ÇÁ¦·Î ¹ßµ¿½ÃÅ´
-    std::function<void(AbilitySystemComponent*, AbilitySystemComponent*)> Activate;
+    // ì–´ë¹Œë¦¬í‹°ë¥¼ ì‹¤ì œë¡œ ë°œë™ì‹œí‚´
 
+    std::function<void(AbilitySystemComponent*, AbilitySystemComponent*, std::wstring&)> Activate;
 
-    virtual ~GameplayAbility() = default; // ºÎ¸ğ Å¬·¡½º´Â °¡»ó ¼Ò¸êÀÚ¸¦ °®´Â °ÍÀÌ ÁÁÀ½
+    virtual ~GameplayAbility() = default; // ë¶€ëª¨ í´ë˜ìŠ¤ëŠ” ê°€ìƒ ì†Œë©¸ìë¥¼ ê°–ëŠ” ê²ƒì´ ì¢‹ìŒ
 };

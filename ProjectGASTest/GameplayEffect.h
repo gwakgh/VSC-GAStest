@@ -1,18 +1,18 @@
-// GameplayEffect.h
+ï»¿// GameplayEffect.h
 #pragma once
 #include <string>
 
 /*
-*   GASÀÇ UGameplayEffect¿¡ ÇØ´ç
-*   ¾îºô¸®Æ¼°¡ ¹ßµ¿ÇßÀ» ¶§ ¹ß»ıÇÏ´Â ½ÇÁ¦ È¿°ú(µ¥¹ÌÁö, Ä¡À¯, ¹öÇÁ µî)¸¦ Á¤ÀÇÇÏ´Â Å¬·¡½º
+*   GASì˜ UGameplayEffectì— í•´ë‹¹
+*   ì–´ë¹Œë¦¬í‹°ê°€ ë°œë™í–ˆì„ ë•Œ ë°œìƒí•˜ëŠ” ì‹¤ì œ íš¨ê³¼(ë°ë¯¸ì§€, ì¹˜ìœ , ë²„í”„ ë“±)ë¥¼ ì •ì˜í•˜ëŠ” í´ë˜ìŠ¤
 */
 
 enum class EEffectType { Instant, Duration, Infinite };
 
 class GameplayEffect {
 public:
-    EEffectType EffectType = EEffectType::Instant; // Áï½Ã, Áö¼Ó, ¹«ÇÑ
-    std::string AttributeToModify; // "Health", "DefensePower" µî
-    float ModifierValue = 0.0f; // º¯°æÇÒ °ª (À½¼ö¸é °¨¼Ò, ¾ç¼ö¸é Áõ°¡)
-    float Duration = 0.0f; // Áö¼Ó ½Ã°£ (Áö¼Ó È¿°úÀÏ °æ¿ì)
+    EEffectType EffectType = EEffectType::Instant; // ì¦‰ì‹œ, ì§€ì†, ë¬´í•œ
+    std::string AttributeToModify; // "Health", "DefensePower" ë“±
+    float ModifierValue = 0.0f; // ë³€ê²½í•  ê°’ (ìŒìˆ˜ë©´ ê°ì†Œ, ì–‘ìˆ˜ë©´ ì¦ê°€)
+    float Duration = 0.0f; // ì§€ì† ì‹œê°„ (ì§€ì† íš¨ê³¼ì¼ ê²½ìš°)
 };

@@ -1,22 +1,26 @@
-// AttributeSet.h
-#pragma once
-/*
-    GAS ÀÇ UAttributeSet ¿¡ ÇØ´ç
-    Ä³¸¯ÅÍÀÇ ¸ğµç ¼öÄ¡¸¦ °ü¸®ÇÏ´Â Å¬·¡½º
-*/
+ï»¿#pragma once
+
 class AttributeSet {
 public:
-    // ±âº» ¼Ó¼º
+    // --- ì§ì ‘ ë³€í•˜ëŠ” ìŠ¤íƒ¯ ---
     float Health = 100.0f;
-    float MaxHealth = 100.0f;
     float Mana = 50.0f;
+
+    // --- ê¸°ë³¸ ìŠ¤íƒ¯ ---
+    float Strength = 10.0f;
+    float Intelligence = 10.0f;
+    float Agility = 5.0f;
+
+    // --- ë°©ì–´ ìŠ¤íƒ¯ ---
+    float DefensePower = 5.0f;
+    float MagicResistance = 5.0f;
+
+    // --- íŒŒìƒ ìŠ¤íƒ¯ ---
+    float BaseMaxHealth = 85.0f;
+    float BaseMaxMana = 25.0f;
+    float MaxHealth = 100.0f;
     float MaxMana = 50.0f;
 
-    // ÀüÅõ ¼Ó¼º
-    float AttackPower = 10.0f;
-    float DefensePower = 5.0f;
-
-    // ¼Ó¼º º¯°æ¿¡ ´ëÇÑ ÀüÈÄ Ã³¸®¸¦ À§ÇÑ ÇÔ¼ö (³ªÁß¿¡ È®Àå °¡´É)
-    // void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue);
-    // void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data);
+    // [ì¤‘ìš”] ì´ í•¨ìˆ˜ì˜ ì„ ì–¸ì´ ì—¬ê¸°ì— ë°˜ë“œì‹œ ìˆì–´ì•¼ í•©ë‹ˆë‹¤.
+    void RecalculateDerivedStats();
 };

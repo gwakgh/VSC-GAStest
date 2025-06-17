@@ -1,10 +1,54 @@
-#include "AbilitySystemComponent.h"
-#include "Character.h" // Character Å¬·¡½ºÀÇ Á¤ÀÇ¸¦ Æ÷ÇÔ
-#include <iostream> // ÄÜ¼Ö Ãâ·ÂÀ» À§ÇØ
+ï»¿#include "AbilitySystemComponent.h"
+#include "Character.h" // Character í´ë˜ìŠ¤ì˜ ì •ì˜ë¥¼ í¬í•¨
+#include <iostream> // ì½˜ì†” ì¶œë ¥ì„ ìœ„í•´
 
-// TryActivateAbility ÇÔ¼öÀÇ ±¸Çö
-void AbilitySystemComponent::TryActivateAbility(const std::string& AbilityName, AbilitySystemComponent* TargetASC) {
-    // 1. ºÎ¿©µÈ ¾îºô¸®Æ¼ ¸ñ·Ï¿¡¼­ ÇØ´ç ÀÌ¸§ÀÇ ¾îºô¸®Æ¼¸¦ Ã£½À´Ï´Ù.
+// ì†ì„± ë³€ê²½ íš¨ê³¼ë¥¼ ìê¸° ìì‹ ì—ê²Œ ì ìš©í•˜ëŠ” í•¨ìˆ˜
+void AbilitySystemComponent::ApplyGameplayEffectToSelf(const GameplayEffect& Effect) {
+    bool bRecalculate = false; // ì¬ê³„ì‚°ì´ í•„ìš”í•œì§€ ì—¬ë¶€ë¥¼ ê¸°ì–µí•  ë³€ìˆ˜
+
+    if (Effect.AttributeToModify == "Health") {
+        BaseAttributes.Health += Effect.ModifierValue;
+
+        // ì²´ë ¥ ìƒí•œ/í•˜í•œ ì¡°ì •
+        if (BaseAttributes.Health > BaseAttributes.MaxHealth) {
+            BaseAttributes.Health = BaseAttributes.MaxHealth;
+        }
+        if (BaseAttributes.Health < 0) {
+            BaseAttributes.Health = 0;
+        }
+    }
+    else if (Effect.AttributeToModify == "Mana") {
+        BaseAttributes.Mana += Effect.ModifierValue;
+
+        if (BaseAttributes.Mana > BaseAttributes.MaxMana) {
+            BaseAttributes.Mana = BaseAttributes.MaxMana;
+        }
+        if (BaseAttributes.Mana < 0) {
+            BaseAttributes.Mana = 0;
+        }
+    }
+    else if (Effect.AttributeToModify == "DefensePower") {
+        BaseAttributes.DefensePower += Effect.ModifierValue;
+        if (BaseAttributes.DefensePower < 0) {
+            BaseAttributes.DefensePower = 0;
+        }
+    }
+    else if (Effect.AttributeToModify == "Strength") {
+        BaseAttributes.Strength += Effect.ModifierValue;
+        bRecalculate = true; // í˜ì´ ë°”ë€Œì—ˆìœ¼ë‹ˆ ì¬ê³„ì‚° í•„ìš”
+    }
+    else if (Effect.AttributeToModify == "Intelligence") {
+        BaseAttributes.Intelligence += Effect.ModifierValue;
+        bRecalculate = true; // ì§€ëŠ¥ì´ ë°”ë€Œì—ˆìœ¼ë‹ˆ ì¬ê³„ì‚° í•„ìš”
+    }
+    // [ì¶”ê°€] í˜ì´ë‚˜ ì§€ëŠ¥ì´ ë³€ê²½ë˜ì—ˆë‹¤ë©´, íŒŒìƒ ìŠ¤íƒ¯ì„ ë‹¤ì‹œ ê³„ì‚°í•©ë‹ˆë‹¤.
+    if (bRecalculate) {
+        BaseAttributes.RecalculateDerivedStats();
+    }
+}
+
+// [ì´ë¦„ìœ¼ë¡œ ì–´ë¹Œë¦¬í‹° ì°¾ì•„ì„œ ì‹¤í–‰] ë²„ì „
+bool AbilitySystemComponent::TryActivateAbility(const std::wstring& AbilityName, AbilitySystemComponent* TargetASC, std::wstring& OutMessage) {
     std::shared_ptr<GameplayAbility> FoundAbility = nullptr;
     for (const auto& ability : GrantedAbilities) {
         if (ability->AbilityName == AbilityName) {
@@ -13,51 +57,31 @@ void AbilitySystemComponent::TryActivateAbility(const std::string& AbilityName, 
         }
     }
 
-    if (FoundAbility == nullptr) {
-        std::cout << AbilityName << " ½ºÅ³À» ¹è¿î ÀûÀÌ ¾ø½À´Ï´Ù." << std::endl;
-        return;
-    }
-
-    // 2. ¾îºô¸®Æ¼¸¦ »ç¿ëÇÒ ¼ö ÀÖ´ÂÁö È®ÀÎÇÕ´Ï´Ù (¸¶³ª, ÄğÅ¸ÀÓ µî).
-    if (!FoundAbility->CanActivate(this)) {
-        std::cout << AbilityName << " ½ºÅ³À» »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù. (¸¶³ª ºÎÁ· µî)" << std::endl;
-        return;
-    }
-
-    // 3. ¾îºô¸®Æ¼¸¦ ¹ßµ¿½ÃÅµ´Ï´Ù.
-    if (FoundAbility && FoundAbility->Activate) {
-        std::cout << Owner->GetName() << "ÀÌ(°¡) " << TargetASC->GetOwner()->GetName() << "¿¡°Ô " << FoundAbility->AbilityName << " ½ÃÀü!" << std::endl;
-        FoundAbility->Activate(this, TargetASC);
-    }
+    // ì–´ë¹Œë¦¬í‹°ë¥¼ ì§ì ‘ ì „ë‹¬í•˜ëŠ” ì•„ë˜ì˜ ì˜¤ë²„ë¡œë”© í•¨ìˆ˜ë¥¼ ì¬ì‚¬ìš©í•˜ì—¬ ì¤‘ë³µì„ ì¤„ì…ë‹ˆë‹¤.
+    return TryActivateAbility(FoundAbility, TargetASC, OutMessage);
 }
 
-
-// ApplyGameplayEffectToSelf ÇÔ¼öÀÇ ±¸Çö
-void AbilitySystemComponent::ApplyGameplayEffectToSelf(const GameplayEffect& Effect) {
-    // 1. ¾î¶² ¼Ó¼ºÀ» º¯°æÇÒÁö È®ÀÎÇÕ´Ï´Ù.
-    if (Effect.AttributeToModify == "Health") {
-        BaseAttributes.Health += Effect.ModifierValue;
-
-        // Ã¼·ÂÀÌ ÃÖ´ë Ã¼·ÂÀ» ³ÑÁö ¾Êµµ·Ï Á¶Á¤
-        if (BaseAttributes.Health > BaseAttributes.MaxHealth) {
-            BaseAttributes.Health = BaseAttributes.MaxHealth;
-        }
-        // Ã¼·ÂÀÌ 0 ¹Ì¸¸À¸·Î ³»·Á°¡Áö ¾Êµµ·Ï Á¶Á¤
-        if (BaseAttributes.Health < 0) {
-            BaseAttributes.Health = 0;
-        }
-
-        if (Effect.ModifierValue > 0) {
-            std::cout << Owner->GetName() << "ÀÇ Ã¼·ÂÀÌ " << Effect.ModifierValue << "¸¸Å­ È¸º¹µÇ¾ú½À´Ï´Ù. (ÇöÀç HP: " << BaseAttributes.Health << ")" << std::endl;
-        }
-        else {
-            std::cout << Owner->GetName() << "ÀÌ(°¡) " << -Effect.ModifierValue << "ÀÇ µ¥¹ÌÁö¸¦ ÀÔ¾ú½À´Ï´Ù. (ÇöÀç HP: " << BaseAttributes.Health << ")" << std::endl;
-        }
+// [ì–´ë¹Œë¦¬í‹° ê°ì²´ë¥¼ ì§ì ‘ ë°›ì•„ì„œ ì‹¤í–‰] ë²„ì „ (ì˜¤ë²„ë¡œë”©)
+bool AbilitySystemComponent::TryActivateAbility(std::shared_ptr<GameplayAbility> AbilityToActivate, AbilitySystemComponent* TargetASC, std::wstring& OutMessage) {
+    // 1. ì „ë‹¬ë°›ì€ ì–´ë¹Œë¦¬í‹° í¬ì¸í„°ê°€ ìœ íš¨í•œì§€ í™•ì¸í•©ë‹ˆë‹¤.
+    if (!AbilityToActivate) {
+        OutMessage = L"ì•Œ ìˆ˜ ì—†ëŠ” ìŠ¤í‚¬ì…ë‹ˆë‹¤.";
+        return false;
     }
-    else if (Effect.AttributeToModify == "Mana") {
-        // ¸¶³ª º¯°æ ·ÎÁ÷...
-    }
-    // ... ´Ù¸¥ ¼Ó¼ºµé¿¡ ´ëÇÑ Ã³¸®
 
-    // TODO: Áö¼Ó(Duration) È¿°ú¿¡ ´ëÇÑ Ã³¸®´Â ³ªÁß¿¡ ±¸Çö
+    // 2. ì‚¬ìš© ì¡°ê±´ì„ í™•ì¸í•©ë‹ˆë‹¤.
+    if (!AbilityToActivate->CanActivate(this)) {
+        // CanActivate í•¨ìˆ˜ ë‚´ë¶€ì—ì„œ "ë§ˆë‚˜ ë¶€ì¡±" ë“±ì˜ ë©”ì‹œì§€ë¥¼ ì¶œë ¥í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.
+        OutMessage = L"ìŠ¤í‚¬ì„ ì‚¬ìš©í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
+        return false;
+    }
+
+    // 3. ì‹¤í–‰ ê°€ëŠ¥í•œ í•¨ìˆ˜ê°€ ìˆëŠ”ì§€ í™•ì¸í•˜ê³  ë°œë™ì‹œí‚µë‹ˆë‹¤.
+    if (AbilityToActivate->Activate) {
+        // ì´ì œ ì‹œì „ ë©”ì‹œì§€ëŠ” BattleManagerê°€, ê²°ê³¼ ë©”ì‹œì§€ëŠ” Activate í•¨ìˆ˜ê°€ ë‹´ë‹¹í•©ë‹ˆë‹¤.
+        AbilityToActivate->Activate(this, TargetASC, OutMessage);
+        return true; // ì„±ê³µ
+    }
+
+    return false; // ì‹¤íŒ¨
 }

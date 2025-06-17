@@ -1,21 +1,23 @@
-﻿#include "MagicClawAbility.h"
+﻿#include "Hit.h"
 #include "AbilitySystemComponent.h" // ASC의 멤버 함수를 사용하기 위해 포함
 #include "GameplayEffect.h"         // GameplayEffect 객체를 생성하기 위해 포함
 #include "Character.h" // GetOwner() -> GetName() 때문에 필요
-#include "ConsoleUtils.h" // ConsoleUtils::GetRandomInt, GetRandomFloat 사용을 위해 포함
+#include "ConsoleUtils.h" // GetRandomInt, GetRandomFloat 함수 사용을 위해 포함
 
+#include <string>
 #include <iostream>
-#include <algorithm>
 
 using namespace std;
 
-MagicClawAbility::MagicClawAbility() {
-    // --- 스킬의 기본 정보 설정 ---
-    this->AbilityName = L"매직클로";
-    this->ManaCost = 15.0f;
-    this->DamageType = EDamageType::Magical;
+// 생성자 구현: 스킬의 기본 정보를 설정합니다.
+Hit::Hit() {
+    // 스킬의 기본 정보 설정
+    this->AbilityName = L"일반공격";
+    this->ManaCost = 0.0f;
+    this->DamageType = EDamageType::Physical;
 
-    // --- [수정됨] 스킬의 실제 동작(Activate)을 하나의 람다 함수로 정의 ---
+    // --- 여기가 핵심 ---
+    // 부모로부터 물려받은 'Activate' 변수에 람다 함수를 대입합니다.
     this->Activate = [this](AbilitySystemComponent* SourceASC, AbilitySystemComponent* TargetASC, wstring& OutMessage) {
 
         // 1. 명중률 계산
@@ -61,12 +63,11 @@ MagicClawAbility::MagicClawAbility() {
         damageEffect.ModifierValue = -finalRandomDamage;
         TargetASC->ApplyGameplayEffectToSelf(damageEffect);
 
-        OutMessage = TargetASC->GetOwner()->GetName() + L"에게 " + to_wstring(static_cast<int>(finalRandomDamage)) + L"의 마법 데미지를 입혔다!";
+        OutMessage = TargetASC->GetOwner()->GetName() + L"에게 " + to_wstring(static_cast<int>(finalRandomDamage)) + L"의 물리 데미지를 입혔다!";
         }; // [수정됨] 람다 대입문이 끝났음을 알리는 세미콜론(;)을 반드시 추가해야 합니다.
 }
-
 // 스킬 사용 가능 여부 확인 로직
-bool MagicClawAbility::CanActivate(AbilitySystemComponent* SourceASC) {
+bool Hit::CanActivate(AbilitySystemComponent* SourceASC) {
     // 시전자의 능력치 정보를 가져옵니다.
     AttributeSet* SourceAttributes = SourceASC->GetAttributes();
 

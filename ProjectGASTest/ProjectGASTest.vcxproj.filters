@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="헤더 파일\Skills">
+      <UniqueIdentifier>{4c0e72d8-d7c8-498a-9ac4-6305b56ec28e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Skills">
+      <UniqueIdentifier>{7eea1093-8ad1-4484-a104-5f781ae1c4ec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AttributeSet.h">
@@ -33,11 +39,17 @@
     <ClInclude Include="Player.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="MagicClawAbility.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="HealthPotion.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsoleUtils.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicClawAbility.h">
+      <Filter>헤더 파일\Skills</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -56,11 +68,26 @@
     <ClCompile Include="Monster.h">
       <Filter>헤더 파일</Filter>
     </ClCompile>
-    <ClCompile Include="MagicClawAbility.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="ItemBase.h">
       <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="BattleManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ConsoleUtils.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Hit.h">
+      <Filter>헤더 파일\Skills</Filter>
+    </ClCompile>
+    <ClCompile Include="MagicClawAbility.cpp">
+      <Filter>소스 파일\Skills</Filter>
+    </ClCompile>
+    <ClCompile Include="Hit.cpp">
+      <Filter>소스 파일\Skills</Filter>
+    </ClCompile>
+    <ClCompile Include="AttributeSet.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

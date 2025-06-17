@@ -1,48 +1,48 @@
-#pragma once
+ï»¿#pragma once
 #include "ItemBase.h"
-#include "GameplayAbility.h"    // ¾îºô¸®Æ¼¸¦ »ı¼ºÇÏ±â À§ÇØ ÇÊ¿ä
-#include "GameplayEffect.h"     // È¿°ú¸¦ »ı¼ºÇÏ±â À§ÇØ ÇÊ¿ä
-#include "AbilitySystemComponent.h" // ¾îºô¸®Æ¼ÀÇ Activate ÇÔ¼ö ÀÎÀÚ·Î ÇÊ¿ä
-#include "Character.h"          // CharacterÀÇ GetName()À» »ç¿ëÇÏ±â À§ÇØ ÇÊ¿ä
+#include "GameplayAbility.h"    // ì–´ë¹Œë¦¬í‹°ë¥¼ ìƒì„±í•˜ê¸° ìœ„í•´ í•„ìš”
+#include "GameplayEffect.h"     // íš¨ê³¼ë¥¼ ìƒì„±í•˜ê¸° ìœ„í•´ í•„ìš”
+#include "AbilitySystemComponent.h" // ì–´ë¹Œë¦¬í‹°ì˜ Activate í•¨ìˆ˜ ì¸ìë¡œ í•„ìš”
+#include "Character.h"          // Characterì˜ GetName()ì„ ì‚¬ìš©í•˜ê¸° ìœ„í•´ í•„ìš”
 #include <iostream>
 
-// ItemBase¸¦ »ó¼Ó¹Ş´Â ±¸Ã¼ÀûÀÎ ¾ÆÀÌÅÛ, HealthPotion
+// ItemBaseë¥¼ ìƒì†ë°›ëŠ” êµ¬ì²´ì ì¸ ì•„ì´í…œ, HealthPotion
 class HealthPotion : public ItemBase {
 public:
-    // HealthPotion »ı¼ºÀÚ
+    // HealthPotion ìƒì„±ì
     HealthPotion() {
-        // 1. ¾ÆÀÌÅÛ ±âº» Á¤º¸ ¼³Á¤ (ºÎ¸ğÀÎ ItemBase·ÎºÎÅÍ ¹°·Á¹ŞÀº º¯¼öµé)
-        this->ItemName = "Ã¼·Â Æ÷¼Ç";
-        this->Description = "»ç¿ëÇÏ¸é Ã¼·ÂÀ» 50 È¸º¹ÇÕ´Ï´Ù.";
+        // 1. ì•„ì´í…œ ê¸°ë³¸ ì •ë³´ ì„¤ì • (ë¶€ëª¨ì¸ ItemBaseë¡œë¶€í„° ë¬¼ë ¤ë°›ì€ ë³€ìˆ˜ë“¤)
+        this->ItemName = "ì²´ë ¥ í¬ì…˜";
+        this->Description = "ì‚¬ìš©í•˜ë©´ ì²´ë ¥ì„ 50 íšŒë³µí•©ë‹ˆë‹¤.";
         this->Type = EItemType::Consumable;
-        this->MaxStack = 10; // ÃÖ´ë 10°³±îÁö °ãÄ¥ ¼ö ÀÖÀ½
+        this->MaxStack = 10; // ìµœëŒ€ 10ê°œê¹Œì§€ ê²¹ì¹  ìˆ˜ ìˆìŒ
 
-        // --- 2. ÇÙ½É ·ÎÁ÷: 'Æ÷¼Ç »ç¿ë' ¾îºô¸®Æ¼¸¦ Áï¼®¿¡¼­ »ı¼º ---
+        // --- 2. í•µì‹¬ ë¡œì§: 'í¬ì…˜ ì‚¬ìš©' ì–´ë¹Œë¦¬í‹°ë¥¼ ì¦‰ì„ì—ì„œ ìƒì„± ---
 
-        // GameplayAbilityÀÇ ±âº» °´Ã¼¸¦ ÇÏ³ª »ı¼ºÇÕ´Ï´Ù.
+        // GameplayAbilityì˜ ê¸°ë³¸ ê°ì²´ë¥¼ í•˜ë‚˜ ìƒì„±í•©ë‹ˆë‹¤.
         auto PotionUsageAbility = std::make_shared<GameplayAbility>();
-        PotionUsageAbility->AbilityName = "Ã¼·Â Æ÷¼Ç »ç¿ë"; // ¾îºô¸®Æ¼ÀÇ ÀÌ¸§
+        PotionUsageAbility->AbilityName = "ì²´ë ¥ í¬ì…˜ ì‚¬ìš©"; // ì–´ë¹Œë¦¬í‹°ì˜ ì´ë¦„
 
-        // C++ ¶÷´Ù(Lambda)¸¦ »ç¿ëÇØ Activate ÇÔ¼öÀÇ µ¿ÀÛÀ» ¿©±â¼­ ¹Ù·Î Á¤ÀÇÇÕ´Ï´Ù.
-        // ÀÌ·¸°Ô ÇÏ¸é PotionAbility.cpp °°Àº º°µµ ÆÄÀÏÀ» ¸¸µé ÇÊ¿ä°¡ ¾ø½À´Ï´Ù.
+        // C++ ëŒë‹¤(Lambda)ë¥¼ ì‚¬ìš©í•´ Activate í•¨ìˆ˜ì˜ ë™ì‘ì„ ì—¬ê¸°ì„œ ë°”ë¡œ ì •ì˜í•©ë‹ˆë‹¤.
+        // ì´ë ‡ê²Œ í•˜ë©´ PotionAbility.cpp ê°™ì€ ë³„ë„ íŒŒì¼ì„ ë§Œë“¤ í•„ìš”ê°€ ì—†ìŠµë‹ˆë‹¤.
         PotionUsageAbility->Activate = [this](AbilitySystemComponent* SourceASC, AbilitySystemComponent* TargetASC) {
 
-            // »ç¿ëÇßÀ» ¶§ ÄÜ¼Ö¿¡ ¸Ş½ÃÁö Ãâ·Â
-            // SourceASC->GetOwner()´Â ÀÌ ÄÄÆ÷³ÍÆ®¸¦ ¼ÒÀ¯ÇÑ Character¸¦ ¹İÈ¯ÇÕ´Ï´Ù.
-            std::cout << SourceASC->GetOwner()->GetName() << "ÀÌ(°¡) " << this->ItemName << "À»(¸¦) »ç¿ëÇÕ´Ï´Ù." << std::endl;
+            // ì‚¬ìš©í–ˆì„ ë•Œ ì½˜ì†”ì— ë©”ì‹œì§€ ì¶œë ¥
+            // SourceASC->GetOwner()ëŠ” ì´ ì»´í¬ë„ŒíŠ¸ë¥¼ ì†Œìœ í•œ Characterë¥¼ ë°˜í™˜í•©ë‹ˆë‹¤.
+            std::cout << SourceASC->GetOwner()->GetName() << "ì´(ê°€) " << this->ItemName << "ì„(ë¥¼) ì‚¬ìš©í•©ë‹ˆë‹¤." << std::endl;
 
-            // 'Ã¼·Â +50' È¿°ú¸¦ ´ãÀº GameplayEffect °´Ã¼¸¦ »ı¼ºÇÕ´Ï´Ù.
+            // 'ì²´ë ¥ +50' íš¨ê³¼ë¥¼ ë‹´ì€ GameplayEffect ê°ì²´ë¥¼ ìƒì„±í•©ë‹ˆë‹¤.
             GameplayEffect HealEffect;
             HealEffect.AttributeToModify = "Health";
-            HealEffect.ModifierValue = 50.0f; // 50¸¸Å­ È¸º¹
+            HealEffect.ModifierValue = 50.0f; // 50ë§Œí¼ íšŒë³µ
 
-            // ½ÃÀüÀÚ(Source) ÀÚ½Å¿¡°Ô È¿°ú¸¦ Àû¿ëÇÕ´Ï´Ù.
+            // ì‹œì „ì(Source) ìì‹ ì—ê²Œ íš¨ê³¼ë¥¼ ì ìš©í•©ë‹ˆë‹¤.
             SourceASC->ApplyGameplayEffectToSelf(HealEffect);
 
-            // TODO: ½ÇÁ¦ °ÔÀÓ¿¡¼­´Â ÀÌ ½ÃÁ¡¿¡ ÀÎº¥Åä¸®¿¡¼­ ÀÌ Æ÷¼ÇÀ» 1°³ Á¦°ÅÇÏ´Â ·ÎÁ÷ÀÌ ÇÊ¿äÇÕ´Ï´Ù.
+            // TODO: ì‹¤ì œ ê²Œì„ì—ì„œëŠ” ì´ ì‹œì ì— ì¸ë²¤í† ë¦¬ì—ì„œ ì´ í¬ì…˜ì„ 1ê°œ ì œê±°í•˜ëŠ” ë¡œì§ì´ í•„ìš”í•©ë‹ˆë‹¤.
             };
 
-        // 3. Áï¼®¿¡¼­ ¸¸µç ¾îºô¸®Æ¼¸¦ ÀÌ ¾ÆÀÌÅÛÀÇ '»ç¿ë È¿°ú'·Î ÁöÁ¤ÇÕ´Ï´Ù.
+        // 3. ì¦‰ì„ì—ì„œ ë§Œë“  ì–´ë¹Œë¦¬í‹°ë¥¼ ì´ ì•„ì´í…œì˜ 'ì‚¬ìš© íš¨ê³¼'ë¡œ ì§€ì •í•©ë‹ˆë‹¤.
         this->UsageAbility = PotionUsageAbility;
     }
 };
