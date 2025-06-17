@@ -2,6 +2,8 @@
 #include "Character.h" // 부모 클래스 포함
 #include "ItemBase.h" // 아이템 관련 클래스 포함
 #include "Hit.h" // Hit 능력 관련 클래스 포함
+#include "StoneSkinAbility.h"
+#include "HealthPotion.h" // HealthPotion 아이템 관련 클래스 포함
 
 #include <iostream>
 #include <vector>
@@ -31,6 +33,11 @@ public:
 
         auto hit = std::make_shared<Hit>();
         this->GetAbilitySystemComponent()->GrantAbility(hit);
+		auto stoneSkin = std::make_shared<StoneSkinAbility>();
+        this->GetAbilitySystemComponent()->GrantAbility(stoneSkin);
+
+        auto healthPotion = std::make_shared<HealthPotion>();
+		AddItem(healthPotion);
 
     }
 
@@ -59,24 +66,7 @@ public:
     const std::vector<std::shared_ptr<ItemBase>>& GetInventory() const {
         return m_Inventory;
     }
-
-    bool UseItem(int inventorySlot, Character& target, std::wstring& OutMessage) {
-        if (inventorySlot < 0 || inventorySlot >= m_Inventory.size()) {
-            OutMessage = L"잘못된 아이템 슬롯입니다."; // 실패 메시지도 설정
-            return false;
-        }
-
-        auto itemToUse = m_Inventory[inventorySlot];
-        if (itemToUse && itemToUse->UsageAbility) {
-            // [수정] OutMessage를 그대로 전달하여 TryActivateAbility를 호출합니다.
-            return GetAbilitySystemComponent()->TryActivateAbility(
-                itemToUse->UsageAbility,
-                target.GetAbilitySystemComponent(),
-                OutMessage // 전달받은 OutMessage를 그대로 넘겨줌
-            );
-        }
-
-        OutMessage = L"사용할 수 없는 아이템입니다."; // 실패 메시지도 설정
-        return false;
-    }
+    std::vector<std::shared_ptr<ItemBase>> GetInventory() {
+        return m_Inventory;
+	}
 };

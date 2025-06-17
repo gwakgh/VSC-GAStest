@@ -1,4 +1,7 @@
 ﻿#include "GameplayAbility.h"
+#include "AbilitySystemComponent.h" // ASC의 멤버 함수를 사용하기 위해 포함
+#include "ConsoleUtils.h" // ConsoleUtils::GetRandomInt, GetRandomFloat 사용을 위해 포함
+#include "DamageUtils.h" // DamageUtils::CalculateDamage 사용을 위해 포함
 
 /*
 *   GAS의 UGameplayAbility에 해당
@@ -19,49 +22,9 @@ bool GameplayAbility::CanActivate(AbilitySystemComponent* SourceASC) {
     // 지금은 기본 동작만 하지만, 나중에 공통 로직을 여기에 추가할 수 있음
     return true;
 }
-/*
-void as() {
-    // 1. 명중률 계산
-    auto sourceAttrs = SourceASC->GetAttributes();
-    auto targetAttrs = TargetASC->GetAttributes();
-    int hitChance = 95 + static_cast<int>(sourceAttrs->Agility - targetAttrs->Agility);
-
-    // 2. 빗나감 판정
-    if (ConsoleUtils::GetRandomInt(1, 100) > hitChance) {
-        OutMessage = L"공격이 빗나갔다!";
-        return;
-    }
-
-    // 3. 마나 소모 (명중했을 때만)
-    GameplayEffect manaEffect;
-    manaEffect.AttributeToModify = "Mana";
-    manaEffect.ModifierValue = -this->ManaCost;
-    SourceASC->ApplyGameplayEffectToSelf(manaEffect);
-
-    // 4. 데미지 계산
-    float baseDamage = 0.0f;
-    float targetDefense = 0.0f;
-
-    if (this->DamageType == EDamageType::Magical) {
-        baseDamage = sourceAttrs->Intelligence * 1.5f;
-        targetDefense = targetAttrs->MagicResistance;
-    }
-    else {
-        baseDamage = sourceAttrs->Strength * 1.2f;
-        targetDefense = targetAttrs->DefensePower;
-    }
-
-    float damageAfterDefense = max(1.0f, baseDamage - targetDefense);
-
-    // 5. 최종 데미지에 난수 적용
-    float minDamage = damageAfterDefense * 0.85f;
-    float maxDamage = damageAfterDefense * 1.15f;
-    float finalRandomDamage = ConsoleUtils::GetRandomFloat(minDamage, maxDamage);
-
-    // 6. 최종 효과 적용 및 결과 메시지 설정
-    GameplayEffect damageEffect;
-    damageEffect.AttributeToModify = "Health";
-    damageEffect.ModifierValue = -finalRandomDamage;
-    TargetASC->ApplyGameplayEffectToSelf(damageEffect);
+float GameplayAbility::ComputeStandardDamage(
+    AttributeSet* source, AttributeSet* target,
+    float magMul, float physMul, float variance)
+{
+    return DamageUtils::CalculateDamage(source, target, this->DamageType, magMul, physMul, variance);
 }
-*/

@@ -48,17 +48,17 @@ namespace ConsoleUtils {
         int screenWidth = csbi.srWindow.Right - csbi.srWindow.Left + 1;
         int screenHeight = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
 
-        for (int i = 0; i < 2; ++i) {
+        for (int i = 0; i < 4; ++i) {
             SetConsoleTextAttribute(hConsole, BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE);
             clearScreen();
-            Sleep(60);
+            Sleep(70);
             SetConsoleTextAttribute(hConsole, 0);
             clearScreen();
-            Sleep(60);
+            Sleep(70);
         }
 
         wstring line(screenWidth, L'█');
-        for (int i = 0; i < screenHeight; i += 2) {
+        for (int i = 0; i < screenHeight; i += 1) {
             gotoxy(0, i);
             wcout << line;
             gotoxy(0, screenHeight - 1 - i);

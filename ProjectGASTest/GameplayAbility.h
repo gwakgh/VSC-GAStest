@@ -3,6 +3,8 @@
 #include <string>
 #include <functional> // std::function을 사용하기 위해 추가
 
+#include "AttributeSet.h" // AttributeSet 클래스가 정의된 헤더 파일을 포함해야 함
+
 /*
 *   GAS 의 UGameplayAbility 에 해당
 *   캐릭터가 사용할 수 있는 능력(어빌리티)을 정의하는 클래스
@@ -32,7 +34,17 @@ public:
     virtual bool CanActivate(AbilitySystemComponent* SourceASC);
     // 어빌리티를 실제로 발동시킴
 
+    std::function<void(AbilitySystemComponent*, std::wstring&)> ItemActivateSelf;
     std::function<void(AbilitySystemComponent*, AbilitySystemComponent*, std::wstring&)> Activate;
 
     virtual ~GameplayAbility() = default; // 부모 클래스는 가상 소멸자를 갖는 것이 좋음
+
+protected:
+    float ComputeStandardDamage(
+        AttributeSet* source,
+        AttributeSet* target,
+        float magMul = 1.5f,
+        float physMul = 1.2f,
+        float variance = 0.15f
+    );
 };

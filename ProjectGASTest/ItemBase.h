@@ -15,8 +15,8 @@ enum class EItemType {
 
 class ItemBase {
 public:
-    std::string ItemName;
-    std::string Description;
+    std::wstring ItemName;
+    std::wstring Description;
     EItemType Type;
     int MaxStack; // 최대 몇 개까지 겹칠 수 있는지
 

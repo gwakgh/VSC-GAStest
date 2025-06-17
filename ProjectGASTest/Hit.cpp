@@ -3,6 +3,7 @@
 #include "GameplayEffect.h"         // GameplayEffect 객체를 생성하기 위해 포함
 #include "Character.h" // GetOwner() -> GetName() 때문에 필요
 #include "ConsoleUtils.h" // GetRandomInt, GetRandomFloat 함수 사용을 위해 포함
+#include "DamageUtils.h" // DamageUtils::CalculateDamage 함수를 사용하기 위해 포함
 
 #include <string>
 #include <iostream>
@@ -16,7 +17,6 @@ Hit::Hit() {
     this->ManaCost = 0.0f;
     this->DamageType = EDamageType::Physical;
 
-    // --- 여기가 핵심 ---
     // 부모로부터 물려받은 'Activate' 변수에 람다 함수를 대입합니다.
     this->Activate = [this](AbilitySystemComponent* SourceASC, AbilitySystemComponent* TargetASC, wstring& OutMessage) {
 
@@ -28,7 +28,7 @@ Hit::Hit() {
         // 2. 빗나감 판정
         if (ConsoleUtils::GetRandomInt(1, 100) > hitChance) {
             OutMessage = L"공격이 빗나갔다!";
-            return;
+            return true;
         }
 
         // 3. 마나 소모 (명중했을 때만)
@@ -37,34 +37,25 @@ Hit::Hit() {
         manaEffect.ModifierValue = -this->ManaCost;
         SourceASC->ApplyGameplayEffectToSelf(manaEffect);
 
-        // 4. 데미지 계산
-        float baseDamage = 0.0f;
-        float targetDefense = 0.0f;
+        // DamageUtils를 활용한 데미지 계산
+        float finalDamage = DamageUtils::CalculateDamage(
+            sourceAttrs,
+            targetAttrs,
+            this->DamageType,
+            1.5f, // 마법 multiplier (필요시 조정 가능)
+            1.2f, // 물리 multiplier
+            0.15f // 데미지 편차 15%
+        );
 
-        if (this->DamageType == EDamageType::Magical) {
-            baseDamage = sourceAttrs->Intelligence * 1.5f;
-            targetDefense = targetAttrs->MagicResistance;
-        }
-        else {
-            baseDamage = sourceAttrs->Strength * 1.2f;
-            targetDefense = targetAttrs->DefensePower;
-        }
-
-        float damageAfterDefense = max(1.0f, baseDamage - targetDefense);
-
-        // 5. 최종 데미지에 난수 적용
-        float minDamage = damageAfterDefense * 0.85f;
-        float maxDamage = damageAfterDefense * 1.15f;
-        float finalRandomDamage = ConsoleUtils::GetRandomFloat(minDamage, maxDamage);
-
-        // 6. 최종 효과 적용 및 결과 메시지 설정
+        // 데미지 적용
         GameplayEffect damageEffect;
         damageEffect.AttributeToModify = "Health";
-        damageEffect.ModifierValue = -finalRandomDamage;
+        damageEffect.ModifierValue = -finalDamage;
         TargetASC->ApplyGameplayEffectToSelf(damageEffect);
 
-        OutMessage = TargetASC->GetOwner()->GetName() + L"에게 " + to_wstring(static_cast<int>(finalRandomDamage)) + L"의 물리 데미지를 입혔다!";
-        }; // [수정됨] 람다 대입문이 끝났음을 알리는 세미콜론(;)을 반드시 추가해야 합니다.
+        OutMessage = TargetASC->GetOwner()->GetName() + L"에게 " + to_wstring(static_cast<int>(finalDamage)) + L"의 물리 데미지를 입혔다!";
+		return true; // 스킬 사용 성공
+        }; 
 }
 // 스킬 사용 가능 여부 확인 로직
 bool Hit::CanActivate(AbilitySystemComponent* SourceASC) {

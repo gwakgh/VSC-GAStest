@@ -3,6 +3,7 @@
 #include "GameplayEffect.h"         // GameplayEffect 객체를 생성하기 위해 포함
 #include "Character.h" // GetOwner() -> GetName() 때문에 필요
 #include "ConsoleUtils.h" // ConsoleUtils::GetRandomInt, GetRandomFloat 사용을 위해 포함
+#include "DamageUtils.h" // DamageUtils::CalculateDamage 사용을 위해 포함
 
 #include <iostream>
 #include <algorithm>
@@ -35,33 +36,23 @@ MagicClawAbility::MagicClawAbility() {
         manaEffect.ModifierValue = -this->ManaCost;
         SourceASC->ApplyGameplayEffectToSelf(manaEffect);
 
-        // 4. 데미지 계산
-        float baseDamage = 0.0f;
-        float targetDefense = 0.0f;
+        // DamageUtils를 활용한 데미지 계산
+        float finalDamage = DamageUtils::CalculateDamage(
+            sourceAttrs,
+            targetAttrs,
+            this->DamageType,
+			2.5f, // AP 계수 (데미지 증가)
+			1.2f, // AD 계수 (데미지 증가)
+            0.15f // 데미지 편차 15%
+        );
 
-        if (this->DamageType == EDamageType::Magical) {
-            baseDamage = sourceAttrs->Intelligence * 1.5f;
-            targetDefense = targetAttrs->MagicResistance;
-        }
-        else {
-            baseDamage = sourceAttrs->Strength * 1.2f;
-            targetDefense = targetAttrs->DefensePower;
-        }
-
-        float damageAfterDefense = max(1.0f, baseDamage - targetDefense);
-
-        // 5. 최종 데미지에 난수 적용
-        float minDamage = damageAfterDefense * 0.85f;
-        float maxDamage = damageAfterDefense * 1.15f;
-        float finalRandomDamage = ConsoleUtils::GetRandomFloat(minDamage, maxDamage);
-
-        // 6. 최종 효과 적용 및 결과 메시지 설정
+        // 데미지 적용
         GameplayEffect damageEffect;
         damageEffect.AttributeToModify = "Health";
-        damageEffect.ModifierValue = -finalRandomDamage;
+        damageEffect.ModifierValue = -finalDamage;
         TargetASC->ApplyGameplayEffectToSelf(damageEffect);
 
-        OutMessage = TargetASC->GetOwner()->GetName() + L"에게 " + to_wstring(static_cast<int>(finalRandomDamage)) + L"의 마법 데미지를 입혔다!";
+        OutMessage = TargetASC->GetOwner()->GetName() + L"에게 " + to_wstring(static_cast<int>(finalDamage)) + L"의 마법 데미지를 입혔다!";
         }; // [수정됨] 람다 대입문이 끝났음을 알리는 세미콜론(;)을 반드시 추가해야 합니다.
 }
 

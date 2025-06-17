@@ -11,9 +11,9 @@
 #include "MagicClawAbility.h"
 #include "BattleManager.h"
 #include "ConsoleUtils.h"
+#include "MainMenu.h"
 
 using namespace std;
-void PlayBattleIntroAnimation();
 
 int main() {
     setlocale(LC_ALL, ".UTF8");
@@ -22,6 +22,7 @@ int main() {
     // --- 1. 게임 설정 ---
     auto player = make_unique<Player>(L"용사");
     auto monster = make_unique<Monster>(L"고블린", 80.0f, 8.0f);
+
     auto magicClaw = make_shared<MagicClawAbility>();
     player->GetAbilitySystemComponent()->GrantAbility(magicClaw);
 

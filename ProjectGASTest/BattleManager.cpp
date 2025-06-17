@@ -35,7 +35,9 @@ void BattleManager::Run() {
 // --- 입력 처리 함수 구현 ---
 void BattleManager::ProcessInput() {
     // 입력을 받아야 하는 상태가 아니면 함수를 바로 종료합니다.
-    if (m_currentState != BattleState::MainMenu && m_currentState != BattleState::AttackMenu) {
+    if (m_currentState != BattleState::MainMenu &&
+        m_currentState != BattleState::AttackMenu &&
+        m_currentState != BattleState::ItemMenu) {
         return;
     }
 
@@ -129,9 +131,55 @@ void BattleManager::ProcessInput() {
         }
         break; // AttackMenu case 끝
 
+    case BattleState::ItemMenu:
+        if (input == (char)224) { // 방향키 입력
+            input = _getch();
+            // [수정] 메뉴 항목은 스킬 슬롯 4개 + 뒤로가기 1개 = 총 5개로 고정
+            const int totalItemMenus = 5;
+            if (input == 72) { // 위
+                m_itemMenuSelection = (m_itemMenuSelection - 1 + totalItemMenus) % totalItemMenus;
+            }
+            else if (input == 80) { // 아래
+                m_itemMenuSelection = (m_itemMenuSelection + 1) % totalItemMenus;
+            }
+        }
+        else if (input == 13) { // 엔터키 입력
+            const auto& inventory = m_player.GetInventory();
+            int iCount = inventory.size();
+
+            // 선택한 위치에 따라 로직을 명확하게 세분화
+            if (m_itemMenuSelection < iCount) { // 아이템
+                // TryActivateAbility 호출 시 m_statusMessage를 세 번째 인자로 전달
+                bool bSuccess = m_player.GetAbilitySystemComponent()->TryActivateAbility(
+                    inventory[m_itemMenuSelection]->ItemName,
+                    m_player.GetAbilitySystemComponent(),
+                    m_statusMessage // 결과 메시지를 이 변수에 직접 담아달라고 요청
+                );
+
+                if (bSuccess) {
+                    m_currentState = BattleState::Busy;
+                }
+                else {
+                    m_statusMessage = L"아이템 사용에 실패했습니다!";
+                }
+            }
+            else if (m_itemMenuSelection == 4) {
+                //'뒤로가기' 선택 시 처리
+                m_currentState = BattleState::MainMenu;
+                m_mainMenuSelection = 0;
+                m_statusMessage = L"무엇을 할까?";
+            }
+            else {
+                // 비어있는 '-' 슬롯을 선택한 경우
+                m_statusMessage = L"선택할 수 없는 슬롯입니다!";
+            }
+        }
+		break; // ItemMenu case 끝
+
     default:
         break;
     }
+
 }
 
 // --- 게임 상태 업데이트 함수 구현 ---
@@ -221,6 +269,30 @@ void BattleManager::Draw() {
             }
         }
     }
+    else if (m_currentState == BattleState::ItemMenu) {
+        const auto& inventory = m_player.GetInventory();
+        vector<wstring> itemOptions;
+
+        for (const auto& item : inventory) {
+            itemOptions.push_back(item->ItemName);
+        }
+        while (itemOptions.size() < 4) { // 4칸을 채울 때까지 빈 슬롯 추가
+            itemOptions.push_back(L"-");
+        }
+        itemOptions.push_back(L"뒤로가기"); // 실제 메뉴 항목에 포함
+
+        for (int i = 0; i < itemOptions.size(); ++i) {
+            gotoxy(24, 20 + i);
+            if (i == m_itemMenuSelection) {
+                wcout << L"> " << itemOptions[i];
+            }
+            else {
+                wcout << L"  " << itemOptions[i];
+            }
+        }
+    }
+
+
     // Busy나 BattleEnd 상태일 때는 오른쪽 메뉴를 그리지 않습니다.
 
     gotoxy(0, 26);

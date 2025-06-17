@@ -17,12 +17,11 @@ class Character; // 전방 선언
 
 class AbilitySystemComponent {
 private:
+    Character* Owner; // 이 컴포넌트의 소유자
     AttributeSet BaseAttributes; // 기본 속성
     std::vector<std::shared_ptr<GameplayAbility>> GrantedAbilities;
 
 public:
-    Character* Owner; // 이 컴포넌트의 소유자
-
     Character* GetOwner() const { return Owner; }
 
     AbilitySystemComponent(Character* InOwner) : Owner(InOwner) {}
@@ -35,8 +34,7 @@ public:
     // 어빌리티 사용 시도
     bool TryActivateAbility(const std::wstring& AbilityName, AbilitySystemComponent* TargetASC, std::wstring& OutMessage);
     bool TryActivateAbility(std::shared_ptr<GameplayAbility> AbilityToActivate, AbilitySystemComponent* TargetASC, std::wstring& OutMessage);
-    //
-
+    
     // 자신에게 게임플레이 이펙트를 적용
     void ApplyGameplayEffectToSelf(const GameplayEffect& Effect);
 
