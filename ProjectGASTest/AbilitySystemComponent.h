@@ -16,11 +16,14 @@ class Character; // 전방 선언
 
 class AbilitySystemComponent {
 private:
-    Character* Owner; // 이 컴포넌트의 소유자
     AttributeSet BaseAttributes; // 기본 속성
     std::vector<std::shared_ptr<GameplayAbility>> GrantedAbilities;
 
 public:
+    Character* Owner; // 이 컴포넌트의 소유자
+
+    Character* GetOwner() const { return Owner; }
+
     AbilitySystemComponent(Character* InOwner) : Owner(InOwner) {}
 
     // 어빌리티를 부여받음

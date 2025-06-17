@@ -8,14 +8,17 @@
 *   - 글로벌 쿨다운으로 스킬을 관리할 경우
 *   - 디버깅을 위해 모든 스킬이 실행될 때 로그를 남기기 위한 경우 등
 */
+// 생성자 구현
+GameplayAbility::GameplayAbility() {
+    // Activate 멤버 변수를 '아무것도 하지 않는' 기본 람다 함수로 초기화합니다.
+    // 이렇게 하면 안정성이 높아집니다.
+    Activate = [](AbilitySystemComponent* SourceASC, AbilitySystemComponent* TargetASC) {
+        // 기본적으로 아무것도 하지 않음
+        };
+}
 
 // CanActivate 함수의 실제 구현
 bool GameplayAbility::CanActivate(AbilitySystemComponent* SourceASC) {
     // 지금은 기본 동작만 하지만, 나중에 공통 로직을 여기에 추가할 수 있음
     return true;
-}
-
-// Activate 함수의 실제 구현
-void GameplayAbility::Activate(AbilitySystemComponent* SourceASC, AbilitySystemComponent* TargetASC) {
-    // 기본 행동은 아무것도 하지 않음
 }

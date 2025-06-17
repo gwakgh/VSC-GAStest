@@ -25,8 +25,10 @@ void AbilitySystemComponent::TryActivateAbility(const std::string& AbilityName, 
     }
 
     // 3. 어빌리티를 발동시킵니다.
-    std::cout << Owner->GetName() << "이(가) " << TargetASC->Owner->GetName() << "에게 " << AbilityName << " 시전!" << std::endl;
-    FoundAbility->Activate(this, TargetASC);
+    if (FoundAbility && FoundAbility->Activate) {
+        std::cout << Owner->GetName() << "이(가) " << TargetASC->GetOwner()->GetName() << "에게 " << FoundAbility->AbilityName << " 시전!" << std::endl;
+        FoundAbility->Activate(this, TargetASC);
+    }
 }
 
 
